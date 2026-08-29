@@ -4,7 +4,7 @@
       "id": "py-basics",
       "title": "Python Fundamentals",
       "type": "course",
-      "domain": ["data-analytics", "web-dev"],
+      "domain": ["data-analytics", "web-dev", "data-engineering"],
       "skills_taught": ["python-basics"],
       "prerequisites": [],
       "level": "beginner",
@@ -15,7 +15,7 @@
       "id": "sql-basics",
       "title": "SQL for Data Analysis",
       "type": "course",
-      "domain": ["data-analytics"],
+      "domain": ["data-analytics", "data-engineering"],
       "skills_taught": ["sql"],
       "prerequisites": [],
       "level": "beginner",
@@ -141,8 +141,7 @@
       "prerequisites": ["react-basics", "backend-basics"],
       "level": "intermediate",
       "duration_hours": 20,
-      "description": "Build and deploy a full-stack app with a React frontend and FastAPI backend.",
-      "duration_hours_note": null
+      "description": "Build and deploy a full-stack app with a React frontend and FastAPI backend."
     },
     {
       "id": "webdev-capstone",
@@ -154,6 +153,149 @@
       "level": "advanced",
       "duration_hours": 12,
       "description": "Graded capstone: a deployed, documented full-stack application."
+    },
+    {
+      "id": "linux-basics",
+      "title": "Linux Command Line Essentials",
+      "type": "course",
+      "domain": ["data-engineering"],
+      "skills_taught": ["linux"],
+      "prerequisites": [],
+      "level": "beginner",
+      "duration_hours": 8,
+      "description": "Navigating the shell, file permissions, processes, and scripting basics."
+    },
+    {
+      "id": "git-basics",
+      "title": "Git and GitHub Mastery",
+      "type": "course",
+      "domain": ["data-engineering", "web-dev", "data-analytics"],
+      "skills_taught": ["git"],
+      "prerequisites": [],
+      "level": "beginner",
+      "duration_hours": 6,
+      "description": "Version control fundamentals: branching, merging, pull requests, and collaboration workflows."
+    },
+    {
+      "id": "docker-basics",
+      "title": "Docker and Containerization",
+      "type": "course",
+      "domain": ["data-engineering"],
+      "skills_taught": ["docker"],
+      "prerequisites": ["linux-basics"],
+      "level": "intermediate",
+      "duration_hours": 10,
+      "description": "Building images, managing containers, and Docker Compose for multi-service apps."
+    },
+    {
+      "id": "spark-basics",
+      "title": "Data Engineering with Apache Spark",
+      "type": "course",
+      "domain": ["data-engineering"],
+      "skills_taught": ["spark", "databricks"],
+      "prerequisites": ["py-basics", "sql-basics"],
+      "level": "intermediate",
+      "duration_hours": 16,
+      "description": "Distributed data processing with Spark, including hands-on work in Databricks notebooks and cluster-based transformations."
+    },
+    {
+      "id": "kafka-intro",
+      "title": "Apache Kafka for Real-time Data",
+      "type": "course",
+      "domain": ["data-engineering"],
+      "skills_taught": ["kafka"],
+      "prerequisites": ["py-basics", "sql-basics"],
+      "level": "intermediate",
+      "duration_hours": 12,
+      "description": "Producers, consumers, topics, and partitions for building real-time streaming pipelines."
+    },
+    {
+      "id": "dw-design",
+      "title": "Data Warehouse Design",
+      "type": "course",
+      "domain": ["data-engineering"],
+      "skills_taught": ["data-warehousing"],
+      "prerequisites": ["sql-basics"],
+      "level": "intermediate",
+      "duration_hours": 10,
+      "description": "Star and snowflake schemas, dimensional modeling, and warehouse architecture."
+    },
+    {
+      "id": "etl-pipeline",
+      "title": "ETL Pipeline Development",
+      "type": "course",
+      "domain": ["data-engineering"],
+      "skills_taught": ["etl"],
+      "prerequisites": ["spark-basics", "kafka-intro"],
+      "level": "intermediate",
+      "duration_hours": 14,
+      "description": "Building extract-transform-load pipelines that move data from streaming and batch sources into a warehouse."
+    },
+    {
+      "id": "db-perf-tuning",
+      "title": "Database Performance Tuning",
+      "type": "course",
+      "domain": ["data-engineering"],
+      "skills_taught": ["db-tuning"],
+      "prerequisites": ["dw-design"],
+      "level": "advanced",
+      "duration_hours": 10,
+      "description": "Indexing strategies, query optimization, and diagnosing slow queries at scale."
+    },
+    {
+      "id": "aws-cloud-practitioner",
+      "title": "AWS Cloud Practitioner",
+      "type": "course",
+      "domain": ["data-engineering"],
+      "skills_taught": ["aws"],
+      "prerequisites": [],
+      "level": "beginner",
+      "duration_hours": 10,
+      "description": "Core AWS services: compute, storage, networking, and IAM fundamentals for data workloads."
+    },
+    {
+      "id": "cicd-pipeline",
+      "title": "CI/CD Pipeline Setup",
+      "type": "course",
+      "domain": ["data-engineering"],
+      "skills_taught": ["cicd"],
+      "prerequisites": ["git-basics", "docker-basics"],
+      "level": "intermediate",
+      "duration_hours": 8,
+      "description": "Automated build, test, and deploy pipelines using GitHub Actions."
+    },
+    {
+      "id": "k8s-orchestration",
+      "title": "Kubernetes Orchestration",
+      "type": "course",
+      "domain": ["data-engineering"],
+      "skills_taught": ["kubernetes"],
+      "prerequisites": ["docker-basics"],
+      "level": "advanced",
+      "duration_hours": 14,
+      "description": "Deploying, scaling, and managing containerized workloads with Kubernetes."
+    },
+    {
+      "id": "de-project",
+      "title": "Project: Real-Time Streaming Data Pipeline",
+      "type": "project",
+      "domain": ["data-engineering"],
+      "skills_taught": ["applied-data-engineering"],
+      "prerequisites": ["kafka-intro", "spark-basics", "etl-pipeline"],
+      "level": "advanced",
+      "duration_hours": 16,
+      "description": "Build an end-to-end pipeline: stream events through Kafka, process them in Spark/Databricks, and land clean data in a warehouse."
+    },
+    {
+      "id": "de-capstone",
+      "title": "Capstone: End-to-End Data Engineering Portfolio",
+      "type": "assessment",
+      "domain": ["data-engineering"],
+      "skills_taught": ["portfolio"],
+      "prerequisites": ["de-project", "dw-design", "cicd-pipeline", "aws-cloud-practitioner"],
+      "level": "advanced",
+      "duration_hours": 15,
+      "description": "Graded capstone combining streaming, batch processing, warehousing, cloud deployment, and CI/CD into one portfolio project."
     }
   ]
 }
