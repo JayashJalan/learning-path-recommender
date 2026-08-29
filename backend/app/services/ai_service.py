@@ -52,6 +52,7 @@ def parse_goal_to_profile(message: str) -> LearnerProfile:
     )
 
     response = client.chat.completions.create(
+        reasoning_effort="low",
         model=MODEL,
         max_tokens=500,
         messages=[
