@@ -1,0 +1,159 @@
+{
+  "courses": [
+    {
+      "id": "py-basics",
+      "title": "Python Fundamentals",
+      "type": "course",
+      "domain": ["data-analytics", "web-dev"],
+      "skills_taught": ["python-basics"],
+      "prerequisites": [],
+      "level": "beginner",
+      "duration_hours": 15,
+      "description": "Variables, control flow, functions, and data structures in Python."
+    },
+    {
+      "id": "sql-basics",
+      "title": "SQL for Data Analysis",
+      "type": "course",
+      "domain": ["data-analytics"],
+      "skills_taught": ["sql"],
+      "prerequisites": [],
+      "level": "beginner",
+      "duration_hours": 10,
+      "description": "Querying relational databases: SELECT, JOIN, GROUP BY, subqueries."
+    },
+    {
+      "id": "stats-foundations",
+      "title": "Statistics Foundations",
+      "type": "course",
+      "domain": ["data-analytics"],
+      "skills_taught": ["statistics"],
+      "prerequisites": [],
+      "level": "beginner",
+      "duration_hours": 12,
+      "description": "Descriptive statistics, probability, distributions, hypothesis testing."
+    },
+    {
+      "id": "pandas-numpy",
+      "title": "Data Wrangling with Pandas & NumPy",
+      "type": "course",
+      "domain": ["data-analytics"],
+      "skills_taught": ["pandas", "numpy"],
+      "prerequisites": ["py-basics"],
+      "level": "intermediate",
+      "duration_hours": 14,
+      "description": "Cleaning, transforming, and analyzing tabular data in Python."
+    },
+    {
+      "id": "data-viz",
+      "title": "Data Visualization with Matplotlib & Seaborn",
+      "type": "course",
+      "domain": ["data-analytics"],
+      "skills_taught": ["data-viz"],
+      "prerequisites": ["pandas-numpy"],
+      "level": "intermediate",
+      "duration_hours": 8,
+      "description": "Building charts and dashboards to communicate insights."
+    },
+    {
+      "id": "analyst-project",
+      "title": "Project: Sales Performance Dashboard",
+      "type": "project",
+      "domain": ["data-analytics"],
+      "skills_taught": ["applied-analytics"],
+      "prerequisites": ["pandas-numpy", "sql-basics", "data-viz"],
+      "level": "intermediate",
+      "duration_hours": 10,
+      "description": "End-to-end analysis: clean a raw sales dataset, query it, and visualize KPIs."
+    },
+    {
+      "id": "ml-intro",
+      "title": "Introduction to Machine Learning",
+      "type": "course",
+      "domain": ["data-analytics"],
+      "skills_taught": ["ml-basics"],
+      "prerequisites": ["pandas-numpy", "stats-foundations"],
+      "level": "advanced",
+      "duration_hours": 18,
+      "description": "Regression, classification, model evaluation with scikit-learn."
+    },
+    {
+      "id": "da-capstone",
+      "title": "Capstone: End-to-End Data Analyst Portfolio",
+      "type": "assessment",
+      "domain": ["data-analytics"],
+      "skills_taught": ["portfolio"],
+      "prerequisites": ["analyst-project", "ml-intro"],
+      "level": "advanced",
+      "duration_hours": 15,
+      "description": "Graded capstone combining SQL, analysis, visualization, and a basic model."
+    },
+    {
+      "id": "html-css",
+      "title": "HTML & CSS Foundations",
+      "type": "course",
+      "domain": ["web-dev"],
+      "skills_taught": ["html", "css"],
+      "prerequisites": [],
+      "level": "beginner",
+      "duration_hours": 10,
+      "description": "Structure and style web pages from scratch."
+    },
+    {
+      "id": "js-basics",
+      "title": "JavaScript Essentials",
+      "type": "course",
+      "domain": ["web-dev"],
+      "skills_taught": ["javascript"],
+      "prerequisites": ["html-css"],
+      "level": "beginner",
+      "duration_hours": 16,
+      "description": "Syntax, DOM manipulation, events, async JS."
+    },
+    {
+      "id": "react-basics",
+      "title": "React Fundamentals",
+      "type": "course",
+      "domain": ["web-dev"],
+      "skills_taught": ["react"],
+      "prerequisites": ["js-basics"],
+      "level": "intermediate",
+      "duration_hours": 18,
+      "description": "Components, hooks, state management, and routing."
+    },
+    {
+      "id": "backend-basics",
+      "title": "Backend APIs with Python & FastAPI",
+      "type": "course",
+      "domain": ["web-dev"],
+      "skills_taught": ["backend-api"],
+      "prerequisites": ["py-basics"],
+      "level": "intermediate",
+      "duration_hours": 14,
+      "description": "Building REST APIs, request validation, and database integration."
+    },
+    {
+      "id": "webdev-project",
+      "title": "Project: Full-Stack Task Manager",
+      "type": "project",
+      "domain": ["web-dev"],
+      "skills_taught": ["applied-webdev"],
+      "prerequisites": ["react-basics", "backend-basics"],
+      "level": "intermediate",
+      "duration_hours": 20,
+      "description": "Build and deploy a full-stack app with a React frontend and FastAPI backend.",
+      "duration_hours_note": null
+    },
+    {
+      "id": "webdev-capstone",
+      "title": "Capstone: Deployed Full-Stack Portfolio App",
+      "type": "assessment",
+      "domain": ["web-dev"],
+      "skills_taught": ["portfolio"],
+      "prerequisites": ["webdev-project"],
+      "level": "advanced",
+      "duration_hours": 12,
+      "description": "Graded capstone: a deployed, documented full-stack application."
+    }
+  ]
+}
