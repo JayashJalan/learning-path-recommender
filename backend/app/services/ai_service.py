@@ -2,9 +2,10 @@ import os
 import json
 import re
 from app.models.schemas import LearnerProfile
+from app.services import course_service
 
-# Groq-hosted model. Check https://console.groq.com/docs/models for current options
-# (llama-3.3-70b-versatile is a solid general-purpose default as of writing).
+# Groq-hosted model. Check https://console.groq.com/docs/models for current options.
+# llama-3.3-70b-versatile was deprecated; openai/gpt-oss-120b is the current general-purpose pick.
 MODEL = "openai/gpt-oss-120b"
 _client = None
 
@@ -39,10 +40,16 @@ def parse_goal_to_profile(message: str) -> LearnerProfile:
     if client is None:
         return _rule_based_profile(message)
 
+    domains = course_service.get_all_domains()
+    domain_preview = "\n".join(
+        f"- {d}: e.g. {', '.join(c.title for c in course_service.get_courses_for_domain(d)[:4])}"
+        for d in domains
+    )
+
     system_prompt = (
         "You are a learner-profiling engine for an ed-tech platform. "
-        "Given a learner's free-text message, extract a structured profile. "
-        "Valid domain values: 'data-analytics' or 'web-dev' (pick the closer match). "
+        "Given a learner's free-text message, extract a structured profile.\n"
+        f"Valid domain values are exactly these (pick whichever best matches the goal):\n{domain_preview}\n"
         "Valid experience_level values: 'beginner', 'intermediate', 'advanced'. "
         "known_skills should use short slugs like 'python-basics', 'sql', 'html', 'javascript' "
         "if mentioned or clearly implied, otherwise an empty list. "
@@ -52,9 +59,9 @@ def parse_goal_to_profile(message: str) -> LearnerProfile:
     )
 
     response = client.chat.completions.create(
-        reasoning_effort="low",
         model=MODEL,
         max_tokens=500,
+        reasoning_effort="low",
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": message},
@@ -76,8 +83,7 @@ def parse_goal_to_profile(message: str) -> LearnerProfile:
 def _rule_based_profile(message: str) -> LearnerProfile:
     """Simple keyword fallback so the app runs without an API key."""
     lower = message.lower()
-    web_keywords = ["web", "frontend", "react", "javascript", "html", "css", "full-stack", "fullstack"]
-    domain = "web-dev" if any(k in lower for k in web_keywords) else "data-analytics"
+    domain = course_service.guess_domain_from_text(message)
 
     if any(k in lower for k in ["beginner", "new to", "never coded", "no experience"]):
         level = "beginner"
@@ -88,7 +94,7 @@ def _rule_based_profile(message: str) -> LearnerProfile:
 
     known = []
     for skill, kw in [("python-basics", "python"), ("sql", "sql"), ("javascript", "javascript"),
-                       ("html", "html"), ("css", "css")]:
+                       ("html", "html"), ("css", "css"), ("git", "git")]:
         if kw in lower:
             known.append(skill)
 

@@ -68,3 +68,49 @@ def topological_path(domain: str, completed_ids: list[str]) -> list[Course]:
         queue.sort(key=lambda cid: (courses[cid].level, courses[cid].title))
 
     return ordered
+
+
+def get_all_domains() -> list[str]:
+    """Every domain that currently exists in the course catalog."""
+    domains = set()
+    for c in load_courses():
+        domains.update(c.domain)
+    return sorted(domains)
+
+
+def get_domain_keyword_index() -> dict[str, set[str]]:
+    """
+    Build a word index per domain straight from course titles, descriptions,
+    and skills_taught -- no hand-maintained keyword lists. Add a course to
+    courses.json and its words automatically join that domain's index.
+    """
+    stopwords = {
+        "a", "an", "the", "and", "or", "for", "with", "to", "of", "in", "on",
+        "is", "are", "this", "that", "your", "you", "using", "from", "into",
+        "as", "at", "by", "will", "can",
+    }
+    index: dict[str, set[str]] = {}
+    for c in load_courses():
+        text = " ".join([c.title, c.description, *c.skills_taught])
+        words = {w.strip(".,()/&-").lower() for w in text.split()}
+        words = {w for w in words if w and w not in stopwords and len(w) > 2}
+        for d in c.domain:
+            index.setdefault(d, set()).update(words)
+    return index
+
+
+def guess_domain_from_text(text: str) -> str:
+    """
+    Score free text against each domain's derived keyword set and return
+    the best match. Used as the rule-based fallback when no LLM is available.
+    """
+    index = get_domain_keyword_index()
+    text_words = {w.strip(".,()/&-").lower() for w in text.lower().split()}
+
+    scores = {d: len(text_words & words) for d, words in index.items()}
+    best = max(scores, key=scores.get) if scores else None
+
+    if best is None or scores[best] == 0:
+        domains = get_all_domains()
+        return domains[0] if domains else "data-analytics"
+    return best
