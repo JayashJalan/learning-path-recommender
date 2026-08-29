@@ -1,16 +1,16 @@
-export default function StatsBar({ steps, totalHours, completedIds }) {
-  const completedCount = steps.filter((s) => completedIds.includes(s.course.id)).length;
-  const completedHours = steps
-    .filter((s) => completedIds.includes(s.course.id))
-    .reduce((sum, s) => sum + s.course.duration_hours, 0);
-  const pct = steps.length ? Math.round((completedCount / steps.length) * 100) : 0;
+export default function StatsBar({ steps, totalHours }) {
+  const totalCount = steps.length;
+  const completedSteps = steps.filter((s) => s.completed);
+  const completedCount = completedSteps.length;
+  const completedHours = completedSteps.reduce((sum, s) => sum + s.course.duration_hours, 0);
+  const pct = totalCount ? Math.round((completedCount / totalCount) * 100) : 0;
 
   return (
     <>
       <div className="stats-row">
         <div className="stat">
           <div className="stat-value">
-            {completedCount}/{steps.length}
+            {completedCount}/{totalCount}
           </div>
           <div className="stat-label">waypoints reached</div>
         </div>

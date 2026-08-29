@@ -1,10 +1,10 @@
-export default function Trail({ steps, completedIds, onComplete, updating }) {
+export default function Trail({ steps, nextCourseId, onComplete, updating }) {
   return (
     <div className="trail">
       <div className="trail-line" />
-      {steps.map((step, i) => {
-        const isCompleted = completedIds.includes(step.course.id);
-        const isNext = !isCompleted && i === 0;
+      {steps.map((step) => {
+        const isCompleted = step.completed;
+        const isNext = !isCompleted && step.course.id === nextCourseId;
         const status = isCompleted ? 'is-completed' : isNext ? 'is-unlocked' : 'is-locked';
 
         return (
@@ -44,7 +44,7 @@ export default function Trail({ steps, completedIds, onComplete, updating }) {
                   </button>
                 ) : (
                   <span className="locked-note">
-                    reach waypoint {String(i).padStart(2, '0')} first
+                    reach waypoint {String(step.order - 1).padStart(2, '0')} first
                   </span>
                 )}
               </div>

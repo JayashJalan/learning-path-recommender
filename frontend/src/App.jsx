@@ -8,8 +8,10 @@ import { createProfile, buildPath, submitFeedback } from './api';
 
 export default function App() {
   const [profile, setProfile] = useState(null);
-  const [path, setPath] = useState(null);
+  const [remainingPath, setRemainingPath] = useState(null);
+  const [completedSteps, setCompletedSteps] = useState([]);
   const [completedIds, setCompletedIds] = useState([]);
+  const [totalHours, setTotalHours] = useState(0);
   const [loading, setLoading] = useState(false);
   const [updating, setUpdating] = useState(false);
   const [error, setError] = useState(null);
@@ -21,8 +23,10 @@ export default function App() {
       const newProfile = await createProfile(message);
       const newPath = await buildPath(newProfile);
       setProfile(newProfile);
-      setPath(newPath);
+      setRemainingPath(newPath);
+      setCompletedSteps([]);
       setCompletedIds(newProfile.completed_course_ids || []);
+      setTotalHours(newPath.total_duration_hours);
     } catch (err) {
       setError(err.message || 'Something went wrong charting your path.');
     } finally {
@@ -31,14 +35,20 @@ export default function App() {
   }
 
   async function handleComplete(courseId) {
-    if (!profile) return;
+    if (!profile || !remainingPath) return;
+
+    // Capture the full step object *before* the backend drops it from the response
+    const stepBeingCompleted = remainingPath.steps.find((s) => s.course.id === courseId);
+    if (!stepBeingCompleted) return;
+
     setUpdating(true);
     setError(null);
-    const nextCompleted = [...completedIds, courseId];
+    const nextCompletedIds = [...completedIds, courseId];
     try {
-      const newPath = await submitFeedback(profile, nextCompleted);
-      setPath(newPath);
-      setCompletedIds(nextCompleted);
+      const newPath = await submitFeedback(profile, nextCompletedIds);
+      setCompletedSteps((prev) => [...prev, { ...stepBeingCompleted, completed: true }]);
+      setCompletedIds(nextCompletedIds);
+      setRemainingPath(newPath);
     } catch (err) {
       setError(err.message || "Couldn't update your route.");
     } finally {
@@ -48,14 +58,31 @@ export default function App() {
 
   function handleReset() {
     setProfile(null);
-    setPath(null);
+    setRemainingPath(null);
+    setCompletedSteps([]);
     setCompletedIds([]);
+    setTotalHours(0);
     setError(null);
   }
 
-  const pathContext = path
-    ? path.steps.map((s, i) => `${i + 1}. ${s.course.title}`).join(' -> ')
-    : '';
+  // Merge completed history + current remaining path into one display list,
+  // renumbered so waypoint numbers stay sequential across both.
+  const displaySteps = [
+    ...completedSteps.map((s, i) => ({ ...s, order: i + 1, completed: true })),
+    ...(remainingPath
+      ? remainingPath.steps.map((s, i) => ({
+          ...s,
+          order: completedSteps.length + i + 1,
+          completed: false,
+        }))
+      : []),
+  ];
+
+  const nextCourseId = remainingPath?.steps[0]?.course.id || null;
+
+  const pathContext = displaySteps
+    .map((s, i) => `${i + 1}. ${s.course.title}${s.completed ? ' (completed)' : ''}`)
+    .join(' -> ');
 
   return (
     <div className="app-shell">
@@ -66,29 +93,25 @@ export default function App() {
         <div className="app-tag">learning path recommender</div>
       </header>
 
-      {!path && (
+      {!remainingPath && (
         <GoalInput onSubmit={handleGoalSubmit} loading={loading} error={error} />
       )}
 
-      {path && profile && (
+      {remainingPath && profile && (
         <>
           <ProfileStrip profile={profile} onReset={handleReset} />
-          <StatsBar
-            steps={path.steps}
-            totalHours={path.total_duration_hours}
-            completedIds={completedIds}
-          />
+          <StatsBar steps={displaySteps} totalHours={totalHours} />
           {error && <p className="error-note" style={{ marginBottom: 20 }}>⚠ {error}</p>}
           <Trail
-            steps={path.steps}
-            completedIds={completedIds}
+            steps={displaySteps}
+            nextCourseId={nextCourseId}
             onComplete={handleComplete}
             updating={updating}
           />
         </>
       )}
 
-      {path && <FieldLog pathContext={pathContext} />}
+      {remainingPath && <FieldLog pathContext={pathContext} />}
     </div>
   );
 }
